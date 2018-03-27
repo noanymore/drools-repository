@@ -9,3 +9,4 @@ out
 gen
 /logs/
 .DS_Store
+/target/
