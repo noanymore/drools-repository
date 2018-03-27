@@ -1,0 +1,8 @@
+package me.sdevil507.drools.rules
+
+rule "test"
+    agenda-group "test"
+    when
+    then
+        System.out.println("测试规则...");
+end

@@ -1,0 +1,49 @@
+package me.sdevil507.drools.rules
+
+import me.sdevil507.drools.model.OrderIntegralDTO;
+
+/* 用户消费金额与返回积分规则 */
+
+// 消费金额不大于100，无积分
+rule "return-0"
+    // 此处设置分组名,通过程序中设置setFocus(),调用改组全部规则
+    agenda-group "integral"
+    when
+        order_integral:OrderIntegralDTO(amount<=100)
+    then
+        System.out.println("消费金额不大于100,无积分返还!");
+        order_integral.setIntegral(0);
+end
+
+// 消费金额大于100小于等于500，返还100积分
+rule "return-100"
+    // 此处设置分组名,通过程序中设置setFocus(),调用改组全部规则
+    agenda-group "integral"
+    when
+        order_integral:OrderIntegralDTO(amount>100,amount<=500)
+    then
+		System.out.println("消费金额大于100小于等于500，返还100积分");
+        order_integral.setIntegral(100);
+end
+
+// 消费金额大于500小于等于1000，返还500积分
+rule "return-500"
+    // 此处设置分组名,通过程序中设置setFocus(),调用改组全部规则
+    agenda-group "integral"
+    when
+        order_integral:OrderIntegralDTO(amount>500,amount<=1000)
+    then
+        System.out.println("消费金额大于500小于等于1000，返还500积分");
+        order_integral.setIntegral(500);
+end
+
+// 消费金额大于1000，返还1000积分
+rule "return-1000"
+    // 此处设置分组名,通过程序中设置setFocus(),调用改组全部规则
+    agenda-group "integral"
+    when
+        order_integral:OrderIntegralDTO(amount>1000)
+    then
+        System.out.println("消费金额大于1000，返还1000积分");
+        order_integral.setIntegral(1000);
+end
