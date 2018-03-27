@@ -30,7 +30,6 @@ public class TestActivationGroupControllerTest {
      */
     @Test
     public void testActivationGroup() throws Exception {
-        // 测试0<amount<=100返还积分
         mvc.perform(
                 MockMvcRequestBuilders.get("/test/testActivationGroup")
         ).andExpect(
