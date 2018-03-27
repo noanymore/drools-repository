@@ -6,7 +6,7 @@
 **Drools-version:7.6.0.Final**
 
 ## 目录结构
-```
+```bash
 .
 ├── java
 │   └── me
@@ -14,16 +14,16 @@
 │           └── drools
 │               ├── SpringBootDroolsApplication.java
 │               ├── config
-│               │   └── DroolsAutoConfiguration.java #drool配置
+│               │   └── DroolsAutoConfiguration.java    #drools配置
 │               ├── controller
 │               │   ├── IntegralController.java #经典的订单返还积分demo
-│               │   └── TestActivationGroupController.java #条件互斥demo
+│               │   └── TestActivationGroupController.java  #条件互斥demo
 │               └── model
-│                   └── OrderIntegralDTO.java #FACT对象
+│                   └── OrderIntegralDTO.java   #(FACT)对象
 └── resources
     ├── application.yml
     └── rules
-        ├── activation_group.drl #互斥规则文件
-        ├── order_integral.drl #订单返还积分规则文件
-        └── test.drl #测试规则文件
+        ├── activation_group.drl    #互斥规则文件
+        ├── order_integral.drl  #订单返还积分规则文件
+        └── test.drl    #测试规则文件
 ```
