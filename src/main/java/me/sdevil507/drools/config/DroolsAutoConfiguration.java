@@ -1,10 +1,8 @@
 package me.sdevil507.drools.config;
 
-import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.*;
 import org.kie.api.runtime.KieContainer;
-import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.spring.KModuleBeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -72,7 +70,9 @@ public class DroolsAutoConfiguration {
         // KieRepository是一个单例对象，它是存放KieModule的仓库
         final KieRepository kieRepository = getKieServices().getRepository();
 
+        //noinspection Convert2Lambda,Anonymous2MethodRef
         kieRepository.addKieModule(new KieModule() {
+            @Override
             public ReleaseId getReleaseId() {
                 return kieRepository.getDefaultReleaseId();
             }
@@ -84,40 +84,6 @@ public class DroolsAutoConfiguration {
         KieContainer kieContainer = getKieServices().newKieContainer(kieRepository.getDefaultReleaseId());
 
         return kieContainer;
-    }
-
-    /**
-     * 构建KieBase
-     * <p>
-     * KieBase就是一个知识仓库，包含了若干的规则、流程、方法等。<br/>
-     * 在Drools中主要就是规则和方法，KieBase本身并不包含运行时的数据之类的。<br/>
-     * 如果需要执行KieBase中的规则的话，就需要根据KieBase创建KieSession。
-     *
-     * @return KieBase
-     * @throws IOException IO异常
-     */
-    @Bean
-    @ConditionalOnMissingBean(KieBase.class)
-    public KieBase getKieBase() throws IOException {
-        return getKieContainer().getKieBase();
-    }
-
-    /**
-     * 构建KieSession
-     * <p>
-     * KieSession就是一个跟Drools引擎打交道的会话，其基于KieBase创建，它会包含运行时数据，包含“事实Fact”，并对运行时数据实时进行规则运算。<br/>
-     * 通过KieContainer创建KieSession是一种较为方便的做法，其本质上是从KieBase中创建出来的。<br/>
-     * KieSession就是应用程序跟规则引擎进行交互的会话通道。 <br>
-     * 创建KieBase是一个成本非常高的事情，KieBase会建立知识（规则、流程）仓库，<br>
-     * 而创建KieSession则是一个成本非常低的事情，所以KieBase会建立缓存，而KieSession则不必。
-     *
-     * @return KieSession
-     * @throws IOException IO异常
-     */
-    @Bean
-    @ConditionalOnMissingBean(KieSession.class)
-    public KieSession getKieSession() throws IOException {
-        return getKieContainer().newKieSession();
     }
 
     @Bean

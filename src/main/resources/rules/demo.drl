@@ -1,0 +1,97 @@
+// package名称最好和文件夹名称一致
+package rules
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import me.sdevil507.drools.model.DemoDTO
+import javax.validation.Valid
+
+// ==========================================常用配置示例===========================================
+// 与其余规则不在同一组
+// 如果不指定agenda-group,则该规则会随指定组的规则一起启动
+// rule后面名称必须唯一
+// salience指定优先级,值越大优先级越高
+rule "common"
+    salience 10000
+    when
+    then
+    System.out.println("this is a common rule!");
+end
+
+// ==========================================timer配置示例===========================================
+// 替代已过时的duration
+// 支持delay(延迟),interval(间隔)与cron表达式模式
+// 也可以设置日历模式
+// 参照https://docs.jboss.org/drools/release/latest/drools-docs/html_single/#_timers_and_calendars
+rule "timer"
+    timer(int:2s)
+    when
+    then
+    System.out.println("end:"+LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
+end
+
+// ==========================================agenda-group配置示例===========================================
+// agenda-group属性现在被用于替代ruleflow-group,分组只需要设置该属性就行
+// 通过agenda-group设置,将规则归集为一组运行
+// 代码中通过kieSession.getAgenda().getAgendaGroup("common-group").setFocus()指定运行的组
+// 最开始执行规则
+rule "demo-0"
+    salience 9999
+    agenda-group "demo-group"
+    when
+    then
+    System.out.println("this is a demo-0 rule!");
+end
+
+// 该规则第二步执行
+rule "demo-1"
+    salience 9998
+    agenda-group "demo-group"
+    when
+    then
+    System.out.println("this is a demo-1 rule!");
+end
+
+// 该规则被禁用
+rule "demo-2"
+    enabled false
+    salience 9997
+    agenda-group "demo-group"
+    when
+    then
+    System.out.println("this is a demo-3 rule!");
+end
+
+// ==========================================activation-group配置示例===========================================
+// activation-group设置一组后,只要一个成功,其余规则不执行
+rule "ag-1"
+    salience 9999
+    agenda-group "xor"
+    activation-group "xor"
+    when
+        // 如果值大于等于30,不成立执行下一规则
+        DemoDTO(value>=30)
+    then
+    System.out.println("this is a ag-1 rule!");
+end
+
+rule "ag-2"
+    salience 9998
+    agenda-group "xor"
+    activation-group "xor"
+    when
+        // 如果值大于等于20,成立,因为设置activation-group属性,第三条规则不执行
+        $dto:DemoDTO(value>=20)
+    then
+        // 更改value值,由于使用insert对象的引用,程序中可以直接通过getValue()获取
+        $dto.setValue($dto.getValue()+30);
+    System.out.println("this is a ag-2 rule!");
+end
+
+rule "ag-3"
+    salience 9997
+    agenda-group "xor"
+    activation-group "xor"
+    when
+    then
+    System.out.println("this is a ag-3 rule!");
+end

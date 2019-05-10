@@ -3,6 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <groupId>me.sdevil507</groupId>
     <artifactId>springboot-drools</artifactId>
     <version>1.0.0</version>
@@ -12,40 +19,24 @@
     <description>springboot整合规则引擎drools</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring.version>1.5.9.RELEASE</spring.version>
-        <drools.version>7.6.0.Final</drools.version>
+        <drools.version>7.20.0.Final</drools.version>
     </properties>
 
-    <dependencyManagement>
-        <!-- Spring boot -->
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <type>pom</type>
-                <version>${spring.version}</version>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
-        <!-- 支持web -->
+        <!-- web支持 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- spring boot test支持 -->
+        <!-- 测试支持 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
-        <!-- 添加kie spring集成支持 -->
+        <!-- drools支持 -->
         <dependency>
             <groupId>org.kie</groupId>
             <artifactId>kie-spring</artifactId>
@@ -69,8 +60,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- drools支持 -->
         <dependency>
             <groupId>org.drools</groupId>
             <artifactId>drools-compiler</artifactId>
