@@ -95,3 +95,65 @@ rule "ag-3"
     then
     System.out.println("this is a ag-3 rule!");
 end
+
+// ==========================================update配置示例===========================================
+// 更新WorkingMemory再次触发规则执行
+rule "update"
+    agenda-group "update"
+    // 当前规则是否不允许多次循环执行（默认:false）
+    // no-loop true
+    when
+        $dto:DemoDTO(value>=20&&value<=25)
+    then
+        $dto.setValue($dto.getValue()+1);
+        // 通过update函数重新更新至WorkingMemory中执行，直至条件不成立
+        update($dto)
+        System.out.println($dto.getValue());
+end
+
+// ==========================================modify配置示例===========================================
+// 演示modify语法,与update功能一致
+rule "modify"
+    agenda-group "modify"
+    when
+        $dto:DemoDTO(value>=20&&value<=25)
+    then
+        modify($dto){
+            setValue($dto.getValue()+1)
+        }
+        System.out.println($dto.getValue());
+end
+
+// ==========================================lock-on-active配置示例===========================================
+// no-loop可以限制自己只执行一次,但是不能控制同组其余规则不触发
+// 极端情况下,同组规则中不同规则间可以相互触发,造成无限循环
+// 因此需要设置lock-on-active为true解决该问题
+rule "loa-1"
+    agenda-group "loa"
+    salience 1000
+    // 防止自身循环调用
+    no-loop true
+    when
+        $dto:DemoDTO(value>=20)
+    then
+        $dto.setValue($dto.getValue()+1);
+        // 此处update会重新调用规则,但是设置no-loop=true,跳过该规则运行下一规则
+        update($dto)
+        System.out.println("loa-1:"+$dto.getValue());
+end
+
+rule "loa-2"
+    agenda-group "loa"
+    salience 999
+    // 该规则不会被触发
+    lock-on-active true
+    when
+        $dto:DemoDTO(value>=21)
+    then
+        // 此处update会重新调用规则,因为是从该规则中触发
+        // 所以规则一的no-loop=true不能限制
+        // 新的调用会变成1->2->1->2->1这样无限循环下去
+        // 因此需要设置lock-on-active=true加以限制
+        update($dto)
+        System.out.println("loa-2:"+$dto.getValue());
+end

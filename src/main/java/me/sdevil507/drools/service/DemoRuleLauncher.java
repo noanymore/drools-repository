@@ -91,13 +91,55 @@ public class DemoRuleLauncher {
         // 创建KieSession
         KieSession kieSession = kieContainer.newKieSession();
         DemoDTO dto = new DemoDTO();
-        dto.setValue(25);
+        dto.setValue(20);
         kieSession.insert(dto);
         kieSession.getAgenda().getAgendaGroup("xor").setFocus();
         System.out.println("before value:" + dto.getValue());
         kieSession.fireAllRules();
         // 获取规则触发改变后的value值
         System.out.println("after value:" + dto.getValue());
+        kieSession.dispose();
+    }
+
+    /**
+     * 测试insert属性执行
+     */
+    public void execWithInsert() {
+        // 创建KieSession
+        KieSession kieSession = kieContainer.newKieSession();
+        DemoDTO dto = new DemoDTO();
+        dto.setValue(20);
+        kieSession.insert(dto);
+        kieSession.getAgenda().getAgendaGroup("update").setFocus();
+        kieSession.fireAllRules();
+        kieSession.dispose();
+    }
+
+    /**
+     * 测试modify属性执行
+     */
+    public void execWithModify() {
+        // 创建KieSession
+        KieSession kieSession = kieContainer.newKieSession();
+        DemoDTO dto = new DemoDTO();
+        dto.setValue(20);
+        kieSession.insert(dto);
+        kieSession.getAgenda().getAgendaGroup("modify").setFocus();
+        kieSession.fireAllRules();
+        kieSession.dispose();
+    }
+
+    /**
+     * 测试lock-on-active属性作用
+     */
+    public void execWithLockOnActive() {
+        // 创建KieSession
+        KieSession kieSession = kieContainer.newKieSession();
+        DemoDTO dto = new DemoDTO();
+        dto.setValue(20);
+        kieSession.insert(dto);
+        kieSession.getAgenda().getAgendaGroup("loa").setFocus();
+        kieSession.fireAllRules();
         kieSession.dispose();
     }
 }

@@ -43,4 +43,19 @@ public class DemoRuleLauncherTest {
     public void execWithActivationGroup() {
         launcher.execWithActivationGroup();
     }
+
+    @Test
+    public void execWithInsert() {
+        launcher.execWithInsert();
+    }
+
+    @Test
+    public void execWithModify() {
+        launcher.execWithModify();
+    }
+
+    @Test
+    public void execWithLockOnActive() {
+        launcher.execWithLockOnActive();
+    }
 }
