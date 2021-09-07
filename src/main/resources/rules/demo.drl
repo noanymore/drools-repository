@@ -4,6 +4,9 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import me.sdevil507.drools.model.DemoDTO
 import javax.validation.Valid
+import java.math.BigDecimal
+import me.sdevil507.drools.model.Param
+import me.sdevil507.drools.model.InsuranceRecommendDTO
 
 // ==========================================常用配置示例===========================================
 // 与其余规则不在同一组
@@ -134,12 +137,16 @@ rule "loa-1"
     // 防止自身循环调用
     no-loop true
     when
-        $dto:DemoDTO(value>=20)
+        param:Param(u>0,age>0,age<17)
+        i:InsuranceRecommendDTO()
     then
-        $dto.setValue($dto.getValue()+1);
+        i.setInsuranceName("大保镖II意外险-少儿版");
+        i.setInsuranceFee(null);
+        i.setPrice(BigDecimal.valueOf(72));
+        i.setInsuranceType(3);
         // 此处update会重新调用规则,但是设置no-loop=true,跳过该规则运行下一规则
-        update($dto)
-        System.out.println("loa-1:"+$dto.getValue());
+        update(i);
+        System.out.println("loa-1:"+i.getInsuranceName());
 end
 
 rule "loa-2"

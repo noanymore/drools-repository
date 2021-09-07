@@ -1,6 +1,9 @@
 package me.sdevil507.drools.service;
 
 import me.sdevil507.drools.model.DemoDTO;
+import me.sdevil507.drools.model.InsuranceQuestionInfo;
+import me.sdevil507.drools.model.InsuranceRecommendDTO;
+import me.sdevil507.drools.model.Param;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.drools.core.base.RuleNameEqualsAgendaFilter;
 import org.kie.api.runtime.KieContainer;
@@ -135,9 +138,13 @@ public class DemoRuleLauncher {
     public void execWithLockOnActive() {
         // 创建KieSession
         KieSession kieSession = kieContainer.newKieSession();
-        DemoDTO dto = new DemoDTO();
-        dto.setValue(20);
-        kieSession.insert(dto);
+        Param param = new Param();
+        param.setU(1);
+        param.setAge(15);
+        kieSession.insert(param);
+        InsuranceRecommendDTO insuranceRecommendDTO = new InsuranceRecommendDTO();
+        kieSession.insert(param);
+        kieSession.insert(insuranceRecommendDTO);
         kieSession.getAgenda().getAgendaGroup("loa").setFocus();
         kieSession.fireAllRules();
         kieSession.dispose();
